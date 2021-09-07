@@ -17,3 +17,14 @@
 # Выведите одно целое число — минимальную сумму, которую заказчику
 # придётся заплатить за превращение принесённой заказчиком строки
 # в палиндром.
+
+def check_palindrom(input_str):
+    N = len(input_str)
+    tugrik = 0
+    for i in range(N // 2):
+        if input_str[i] != input_str[N-i-1]:
+            tugrik += 1
+    return tugrik
+
+test_str = input()
+print(check_palindrom(test_str))

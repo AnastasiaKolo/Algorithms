@@ -27,7 +27,22 @@
 
 N = 10
 a = list(map(int, input().strip().split()))[:N]
-
-curr_max = 0
+# неверное решение
+first_house = -1
+last_house = -1
+first_shop = -1
+last_shop = -1
 for i in range(N):
     if a[i] == 1:
+        # жилой дом
+        last_house = i
+        if first_house == -1:
+            first_house = i
+    elif a[i] == 2:
+        # магазин
+        last_shop = i
+        if first_shop == -1:
+            first_shop = i
+result = max(abs(first_house - last_shop), abs(first_shop - last_house))
+print(result)
+print(first_house,last_house,first_shop ,last_shop )
