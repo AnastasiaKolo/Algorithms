@@ -37,3 +37,28 @@
 # Для каждой ножки нужно выдать ее положение, как оно задано
 # во входных данных. Ножки следует перечислять слева направо,
 # в том порядке, в котором они встречаются во входных данных.
+
+def remove_legs(a, l, k):
+    left_center = l // 2 + l % 2 - 1
+    right_center = l - l // 2 - l % 2
+    left_leg = -1
+    right_leg = -1
+    legs = []
+    # идем слева направо и ищем ножки которые надо оставить
+    for i in range(k):
+        if (a[i] <= left_center):
+            left_leg = a[i]
+        if (a[i] >= right_center) and (right_leg == -1):
+            right_leg = a[i]
+    # убираем из массива ножки которые не оставляем:
+    if left_leg != -1:
+        legs.append(left_leg)
+    if (right_leg != -1) and (right_leg != left_leg):
+        legs.append(right_leg)
+    return legs
+
+
+L, K = map(int, input().split())
+bench = list(map(int, input().strip().split()))[:K]
+result = remove_legs(bench, L, K)
+print(' '.join(str(e) for e in result))
