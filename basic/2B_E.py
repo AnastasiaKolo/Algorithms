@@ -29,3 +29,17 @@
 # Выведите одно число - минимальное количество секунд,
 # необходимое Ивану в худшем случае для определения того,
 # в какой папке содержится диплом.
+def count_time(a: list):
+    sum_a = 0
+    max_a = 0
+    for i in range(len(a)):
+        if a[i] > max_a:
+            max_a = a[i]
+        sum_a += a[i]
+    return sum_a - max_a
+
+
+N = int(input())
+a_N = list(map(int, input().strip().split()))[:N]
+result = count_time(a_N)
+print(result)
