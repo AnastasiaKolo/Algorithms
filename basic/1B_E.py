@@ -23,7 +23,7 @@
 # двух вершин, выведите ту вершину, номер которой меньше.
 d = int(input())
 X, Y = map(int, input().split())
-
+# мое решение:
 if (X >= 0) and (Y >= 0) and (X + Y <= d):
     print(0)
 else:
@@ -37,3 +37,10 @@ else:
         print(2)
     else:
         print(3)
+
+# решение с разбора:
+if (X >= 0) and (Y >= 0) and (X + Y <= d):
+    print(0)
+else:
+    dist = [( x ** 2 + y ** 2, 1), ((x - d) ** 2 + y ** 2, 2), (x ** 2 + (y - d) ** 2, 3)]
+    print(min(dist)[1])

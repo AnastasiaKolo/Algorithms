@@ -35,7 +35,7 @@ def convert_date(str_date, date_format="%d %m %Y"):
     except ValueError:
         return 'not converted', 1
     return converted.strftime("%d %m %Y"), 0
-
+# мое решение:
 def check_date(date_str):
     x, y, z = map(int, date_str.split())
     if (x > 12) or (y > 12) or (x == y):

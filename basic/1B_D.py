@@ -26,10 +26,11 @@
 
 N = int(input())
 a = list(map(int, input().strip().split()))[:N]
-
+# мое решение:
 if N <= 2:
     print(a[0])
 else:
     print(a[N // 2])
-
 # Сложно было составить решение в голове
+
+

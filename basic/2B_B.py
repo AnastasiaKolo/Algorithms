@@ -27,22 +27,28 @@
 
 N = 10
 a = list(map(int, input().strip().split()))[:N]
-# неверное решение
-first_house = -1
-last_house = -1
-first_shop = -1
-last_shop = -1
+# виртуальный магазин далеко слева
+left_shop = -20
+# массив расстояний до ближайшего магазина слева
+left = [0] * N
 for i in range(N):
-    if a[i] == 1:
-        # жилой дом
-        last_house = i
-        if first_house == -1:
-            first_house = i
-    elif a[i] == 2:
+    if a[i] == 2:
         # магазин
-        last_shop = i
-        if first_shop == -1:
-            first_shop = i
-result = max(abs(first_house - last_shop), abs(first_shop - last_house))
-print(result)
-print(first_house,last_house,first_shop ,last_shop )
+        left_shop = i
+    elif a[i] == 1:
+        # дом
+        left[i] = i - left_shop
+# виртуальный магазин далеко справа
+right_shop = 30
+# считаем расстояния до ближайшего магазина справа
+ans = 0
+# цикл в обратном порядке
+for i in range(N - 1, -1, -1):
+    if a[i] == 2:
+        # магазин
+        right_shop = i
+    elif a[i] == 1:
+        # дом
+        min_dist = min(right_shop - i, left[i])
+        ans = max(min_dist, ans)
+print(ans)
