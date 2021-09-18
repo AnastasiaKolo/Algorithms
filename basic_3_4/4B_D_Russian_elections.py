@@ -25,3 +25,14 @@
 # Формат вывода
 # Программа должна вывести названия всех партий и количество голосов в парламенте, полученных
 # данной партией. Названия необходимо выводить в том же порядке, в котором они шли во входных данных.
+
+def elections_from_text(filename='input.txt'):
+    votes = {}
+    with open(filename) as f:
+        for line in f:
+            line_votes = line.strip().split(-1)
+            for word in line_words:
+                if word not in words:
+                    words[word] = 0
+                words[word] += 1
+    return words
