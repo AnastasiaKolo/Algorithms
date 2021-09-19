@@ -28,13 +28,13 @@ def list_from_dict(words):
     ans = []
     for word in words:
         ans.append((words[word], word))
-    return sorted(ans, reverse=True)
+    return sorted(ans, key=lambda x: (-x[0], x[1],))
 
 frequency_dict = dict_from_text()
 sorted_list = list_from_dict(frequency_dict)
 
 for word in sorted_list:
-    print(str(word[0]) + ' ' + word[1])
+    print(word[1])
 
 '''
 input----------------------------
