@@ -19,69 +19,85 @@
 
 # я сначала не учла, что среди названных монжеств
 # с ответом YES могут содержаться подмножества
+# N = int(input())
+# numbers_include = set()
+# numbers_exclude = set()
+# current_list = []
+# input_string = ''
+# surrender = False
+# while not surrender:
+#     input_string = input()
+#     if input_string == 'HELP':
+#         surrender = True
+#     else:
+#         current_ans = input()
+#         current_list = list(map(int, input_string.strip().split()))
+#         if current_ans == 'YES':
+#             if numbers_include:
+#                 numbers_include = numbers_include.intersection(current_list)
+#             else:
+#                 numbers_include.update(current_list)
+#         else:
+#             numbers_exclude.update(current_list)
+# answer = []
+# if numbers_include:
+#     answer = sorted(list(numbers_include - numbers_exclude))
+# else:
+#     for i in range(N):
+#         if i + 1 not in numbers_exclude:
+#             answer.append(i + 1)
+#
+# print(' '.join(str(e) for e in answer))
+
+# Решение с разбора
 N = int(input())
-numbers_include = set()
-numbers_exclude = set()
-current_list = []
-input_string = ''
-surrender = False
-while not surrender:
-    input_string = input()
-    if input_string == 'HELP':
-        surrender = True
+possible = set(range(1, N + 1))
+s = input().strip()
+while s != 'HELP':
+    nums = set(map(int, s.split()))
+    s = input().strip()
+    if s == 'YES':
+        possible.intersection_update(nums)
     else:
-        current_ans = input()
-        current_list = list(map(int, input_string.strip().split()))
-        if current_ans == 'YES':
-            if numbers_include:
-                numbers_include = numbers_include.intersection(current_list)
-            else:
-                numbers_include.update(current_list)
-        else:
-            numbers_exclude.update(current_list)
-answer = []
-if numbers_include:
-    answer = sorted(list(numbers_include - numbers_exclude))
-else:
-    for i in range(N):
-        if i + 1 not in numbers_exclude:
-            answer.append(i + 1)
+        possible.difference_update(nums)
+    s = input().strip()
+print(*sorted(possible))
 
-print(' '.join(str(e) for e in answer))
+'''
+4
+1 2 3
+YES
+1 2
+YES
+HELP
 
-# 4
-# 1 2 3
-# YES
-# 1 2
-# YES
-# HELP
+10
+1 2 3 4 5 6 7 8 9 10
+YES
+1
+NO
+2
+NO
+3
+NO
+4
+NO
+6
+NO
+7
+NO
+8
+NO
+9
+NO
+10
+NO
+HELP
 
-# 10
-# 1 2 3 4 5 6 7 8 9 10
-# YES
-# 1
-# NO
-# 2
-# NO
-# 3
-# NO
-# 4
-# NO
-# 6
-# NO
-# 7
-# NO
-# 8
-# NO
-# 9
-# NO
-# 10
-# NO
-# HELP
-
-# 10
-# 1 2 3 4 5
-# YES
-# 2 4 6 8 10
-# NO
-# HELP
+10
+1 2 3 4 5
+YES
+2 4 6 8 10
+NO
+HELP
+'''
