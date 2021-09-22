@@ -17,7 +17,7 @@ def dict_from_text(filename='input.txt'):
     words = {}
     with open(filename) as f:
         for line in f:
-            line_words = line.strip().split()
+            line_words = line.split()
             for word in line_words:
                 if word not in words:
                     words[word] = 0
