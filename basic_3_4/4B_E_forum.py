@@ -14,9 +14,72 @@
 # Первая строка содержит целое число - номер сообщения, ответом на которое оно является.
 # Сообщения нумеруются, начиная с единицы. Ответ всегда появляется позже, чем сообщение,
 # ответом на которое он является. Вторая строка содержит текст сообщения.
-#
 # Длина каждого из сообщений не превышает 100 символов.
 #
 # Формат вывода
 # Выведите название темы, к которой относится наибольшее количество сообщений. Если таких тем
 # несколько, то выведите первую в хронологическом порядке
+
+
+themes = {}
+with open('input.txt', 'r', encoding='utf8') as fin:
+    N = int(fin.readline())
+    message_num = 0
+    while (line := fin.readline()):
+        num = int(line)
+        message_num += 1
+        if not num:                  # 0 - начало новой темы
+            header = fin.readline()  # прочитали заголовок
+            themes[header] = set()
+            themes[header].add(message_num)
+            text = fin.readline()    # прочитали текст
+        else:                        # тогда введен номер сообщения на которое ответили
+            text = fin.readline()  # прочитали текст
+            for theme in themes:
+                if num in themes[theme]: # нашли , на какое сообщение ответ
+                    themes[theme].add(message_num)
+max = 0
+ans = ''
+first_msg = N
+for theme in themes:
+    l = len(themes[theme])
+    f = min(themes[theme])
+    if (l > max) or (l == max) and (f <= first_msg):
+        max = l
+        ans = theme
+        first_msg = f
+
+print(ans)
+
+# на разборе использовали сортировку подсчетом
+# корневая идея - в сжатии исходного деоева,
+# т.е. нам для решения задачи не нужны не только
+# тексты сообщений, но и все номера их
+n = int(input())
+reply = [0] * n
+topics = [''] * n
+for i in range(n):
+    num = int(input())
+    if num == 0:
+        reply[i] = i
+        topics[i] = input()
+        input()
+    else: # в данном случае num это номер сообщения на которое мы ответили
+        reply[i] = reply[num - 1] # храним только номер исходного сообщенияы в теме
+        input()
+cntreplys = {}
+for rep in reply:
+    cntreplys[rep] = cntreplys.get(rep, 0) + 1
+ans = []
+for topic in cntreplys:
+    ans.append((-cntreplys[topic], topic))
+print(topics[min(ans)[1]])
+
+
+
+
+
+
+
+
+

@@ -1,10 +1,9 @@
-Party 1 34523
-Party 2 65434
-Party 3 453
-Party 4 65784
-Party 5 5253
-Party 6 3568
-Party 7 0
-Party 8 1
-Party 9 4592
-Party 10 90389
+3
+0
+topic 1
+body of message 1
+0
+topic 2
+body of message 2
+2
+body of message 3 - reply to message 2
