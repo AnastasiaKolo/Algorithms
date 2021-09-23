@@ -27,6 +27,7 @@
 # данной партией. Названия необходимо выводить в том же порядке, в котором они шли во входных данных.
 
 ### я не поняла условие, как рассчитывается в крайних случаях (например сумма голосов меньше 450) ###
+# не учла изначально что деление вещественное
 def elections_from_text(filename='input.txt'):
     votes = {}
     with open(filename) as f:
@@ -42,41 +43,23 @@ def count_seats(votes):
     parliament_seats_dict = {}
     sum_votes = sum(votes.values())
     quotient = sum_votes / 450
-    sum_seats = 0
+    free_seats = 450
     for vote in votes.keys():
-        remainder = 0
-        if quotient == 1:
-            if votes[vote] >= 450:
-                current_seats = int(450 - sum_seats)
-            else:
-                current_seats = votes[vote]
-        elif quotient > 1:
-            remainder = votes[vote] % quotient
-            current_seats = int((votes[vote] - remainder) // quotient)
-        else:
-            remainder = votes[vote]
-            current_seats = 0
+        remainder = votes[vote] % quotient
+        current_seats = votes[vote] // quotient
         parliament_seats_remainder.append((vote, remainder, votes[vote]))
-        parliament_seats_dict[vote] = current_seats
-        sum_seats += current_seats
-    sorted_by_remainder = sorted(parliament_seats_remainder, key=lambda x: (-x[1], -x[2]))
-    leftover_seats = 450 - sum_seats
-    i = 0
-    num_parties = len(parliament_seats_dict)
-    while leftover_seats > 0:
-        parliament_seats_dict[sorted_by_remainder[i][0]] += 1
-        if i < num_parties - 1:
-            i += 1
-        else:
-            i = 0
-        leftover_seats -= 1
+        parliament_seats_dict[vote] = int(current_seats)
+        free_seats -= current_seats
+    parliament_seats_remainder.sort(key=lambda x: (-x[1], -x[2]))
+    for i in range(int(free_seats)):
+        parliament_seats_dict[parliament_seats_remainder[i][0]] += 1
     return parliament_seats_dict
 
 
 votes = elections_from_text()
 parliament_seats = count_seats(votes)
-for party in parliament_seats:
-    print(party + ' ' + str(parliament_seats[party]))
+for party in votes.keys():
+    print(party, str(parliament_seats[party]))
 
 '''
 WA
