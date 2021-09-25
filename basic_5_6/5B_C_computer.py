@@ -22,3 +22,69 @@
 # i-я группа. (Нумерация как групп, так и аудиторий, начинается с 1). Если
 # i-я группа осталась без аудитории, i-е число должно быть равно 0. Если
 # допустимых распределений несколько, выведите любое из них.
+
+def groups_to_rooms(groups, rooms):
+    merged = {} # номер аудитории, номер группы
+    group = room = 0
+    cnt = 0
+    for k in range(len(rooms)):
+        if group != len(groups) and (room == len(rooms) or groups[group][0] < rooms[room][0]):
+            # группа помещается, сохраняем в словаре номер группы и номер комнаты
+            merged[groups[group][1]] = rooms[room][1]
+            group += 1 # группа распределена
+            room += 1 # комната занята
+            cnt += 1
+        else:
+            # группа не помещается, увеличиваем номер комнаты
+            room += 1
+    return merged, cnt
+
+N, M = map(int, input().split())
+groups = []
+rooms = []
+i = 1
+for group in input().split():
+    groups.append((int(group), i))
+    i += 1
+i = 1
+for room in input().split():
+    rooms.append((int(room), i))
+    i += 1
+sorted_gropus = sorted(groups)
+rooms.sort()
+merged, cnt = groups_to_rooms(sorted_gropus, rooms)
+# print(groups)
+# print(rooms)
+# print(merged)
+ans = []
+for group, idx in groups:
+    ans.append(merged.get(idx, 0))
+print(cnt)
+print(' '.join(str(i) for i in ans))
+
+'''
+input
+1 1
+1
+2
+output
+1
+1 
+
+input
+1 1
+1
+1
+output
+0
+0 
+
+input
+4 4
+5 10 15 20
+10 10 10 20
+output
+2
+1 4 0 0 
+
+'''

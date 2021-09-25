@@ -86,6 +86,7 @@ def countprefixsums(nums):
     prefixsumbyvalue = {0: 1}
     nowsum = 0
     for now in nums:
+        nowsum += now
         if nowsum not in prefixsumbyvalue:
             prefixsumbyvalue[nowsum] = 0
         prefixsumbyvalue[nowsum] += 1
@@ -99,7 +100,9 @@ def countzerosumranges(prefixsumbyvalue):
         # возможные левые и правые груницы этих отрезков
         cntranges += cntsum * (cntsum - 1) // 2
 
-
+# ------------------------------------------
+# ------------------------------------------
+# ------------------------------------------
 # ------------------------------------------
 # Метод двух указателей
 # Дана отсортированная последовательность чисел длиной N и число K
@@ -129,8 +132,62 @@ def cntpairwithdiffgtk(sortednums, k):
     return cntpairs
 
 
+# Пример 1
+# Игрок в футбол характеризуется профессионализомом(число)
+# Команда называется сплоченной, если проф. любого игрока не превосходит
+# суммарный проф. любых двух игроков из команды
+# команда может состоять из любого кол-ва игроков.
+# Дана отсортированная посл-ть чисел N - проф-м игроков
+# Необходимо найти максимальный суммарный проф-м команды
+def bestteamsum(players):
+    bestsum = 0
+    nowsum = 0
+    last = 0
+    for first in range(len(players)):
+        while last < len(players) and (last == first or players[first] + players[first + 1] >= players[last]):
+            nowsum += players[last]
+            last += 1
+        bestsum = max(bestsum, nowsum)
+        nowsum -= players[first]
+    return bestsum
+
+# Пример 2
+# Дано 2 отсортированные последовательности чисел , длиной N и M соответственно
+# Нужно слить их в одну отсортированную последовательность
+
+# Неидеальная реализация: добавляем фиктивные эл-ты к исходным массивам, которые затем убираем
+def merge1(nums1, nums2):
+    merged = [0] * (len(nums1) + len(nums2))
+    first1 = first2 = 0
+    inf = max(nums1[-1], nums2[-1]) + 1
+    nums1.append(inf)
+    nums2.append(inf)
+    for k in range(len(nums1) + len(nums2) - 2):
+        if nums1[first1] <= nums2[first2]:
+            merged[k] = nums1[first1]
+            first1 += 1
+        else:
+            merged[k] = nums2[first2]
+            first2 += 1
+    nums1.pop()
+    nums2.pop()
+    return merged
+
+# Получше
+def merge2(nums1, nums2):
+    merged = [0] * (len(nums1) + len(nums2))
+    first1 = first2 = 0
+    for k in range(len(nums1) + len(nums2)):
+        if first1 != len(nums1) and (first2 == len(nums2) or nums1[first1] < nums2[first2]):
+            merged[k] = nums1[first1]
+            first1 += 1
+        else:
+            merged[k] = nums2[first2]
+            first2 += 1
+    return merged
 
 
-
-
-
+nums1 = list(map(int, input().split()))
+nums2 = list(map(int, input().split()))
+mrg = merge2(nums1, nums2)
+print(mrg)
