@@ -8,3 +8,19 @@
 #
 # Формат вывода
 # Выведите YES если введённая строка является правильной скобочной последовательностью и NO иначе
+def check_brackets(st):
+    check = 0
+    for c in st:
+        if c == '(':
+            check += 1
+        if c == ')':
+            check -= 1
+        if check < 0:
+            return 'NO'
+    if check == 0:
+        return 'YES'
+    else:
+        return 'NO'
+
+st = input()
+print(check_brackets(st))
