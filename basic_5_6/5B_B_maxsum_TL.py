@@ -1,3 +1,6 @@
+# Решение за N^2, не вписывается в time limit
+# Решение за O(N^2): переберем начало и двигаем конец отрезка
+# и просуммируем все его эл-ты
 def countmaxrangesum_nn(nums, n):
     maxrangesum = nums[0]
     for i in range(n):

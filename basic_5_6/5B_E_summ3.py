@@ -9,3 +9,74 @@
 # Если таких i,j,k не существует, выведите единственное число−1.
 # Иначе выведите на одной строке три числа —i,j,k. Элементы массивов нумеруются с нуля.
 # Если ответов несколько, выведите лексикографически минимальный.
+
+def input_list_tuples():
+    lst = []
+    list_input = list(map(int, input().split()))
+    for ai in range(1, list_input[0] + 1):
+        lst.append((list_input[ai], ai - 1))
+    return sorted(lst), list_input[0]
+
+S = int(input())
+A, len_A = input_list_tuples()
+B, len_B = input_list_tuples()
+C = list(map(int, input().split()))
+set_C = set(C[1:])
+ans = []
+i = j = 1
+while (i < len_A) and (A[i][0] <= S):
+    while (j < len_B) and (B[j][0] <= S):
+        x = (S - A[i][0] - B[j][0])
+        if x in set_C:
+            ans.append((A[i][1], B[j][1], C[1:].index(x)))
+        j += 1
+    i += 1
+
+# for i in range(1, A[0] + 1):
+#     for j in range(1, B[0] + 1):
+#         x = (S - A[i] - B [j])
+#         if x in set_C:
+#             ans.append((i - 1, j - 1, C[1:].index(x)))
+ans.sort()
+if len(ans) > 0:
+    print(' '.join(str(i) for i in ans[0]))
+else:
+    print(-1)
+
+
+'''
+input
+6
+2 2 1
+2 2 2
+2 2 4
+output
+0 0 0
+
+
+input
+3
+2 1 2
+2 3 1
+2 3 1
+output
+0 1 1
+
+
+input
+10
+1 5
+1 4
+1 3
+output
+-1
+
+input
+5
+4 1 2 3 4
+3 5 2 1
+4 5 3 2 2
+output
+0 1 2
+
+'''
