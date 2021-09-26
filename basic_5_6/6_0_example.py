@@ -71,7 +71,7 @@ def checkstickercount(side, params):
 ## проверка
 # n, w, h = map(int, input().split())
 # params = n, w, h
-# side = rbinsearch(0, w, checkstickercount, params)
+# side = rbinsearch(0, min(w, h), checkstickercount, params)
 # print(side)
 
 # Задача 4
@@ -160,8 +160,36 @@ def checkcredit(mpay, params):
 # print(n / 12)
 
 # Тернарный поиск
+# N велосипедистов, участвующие в шоссейной гонке, в нек. момент времени оказались в точках
+# удаленных от места старта на x1 x2 ..xn метров
+# Каждый велосипедист двигается с постоянной скоростью v1, v2,... vn м/с
+# Определить момент времени в гонке в которой расстояние между первым и последним
+# станет минимальным
 #
-#
-#
-#
-#
+# Решение
+# Определим ф-ю dist(t) которая будет за O(N) определять
+# расст между лидером и замыкающим в момент времени t.
+# Если dist(t + eps) > dist(t), то ф-я растет и надо сдвинуть
+# левую груницу поиска. Иначе - правую
+
+def dist(t, params):
+    x, v = params
+    minpos = maxpos = x[0] + v[0] * t
+    for i in range(1, len(x)):
+        nowpos = x[i] + v[i] * t
+        minpos = min(minpos, nowpos)
+        maxpos = max(maxpos, nowpos)
+    val = maxpos - minpos
+    return val
+
+def checkasc(t, eps, params):
+    return dist(t + eps, params) >= dist(t, params)
+
+def fbinsearch1(l, r, eps, check, params):
+    while l + eps < r:
+        m = (l + r) / 2
+        if checkasc(m, eps, params):
+            r = m
+        else:
+            l = m
+    return l
