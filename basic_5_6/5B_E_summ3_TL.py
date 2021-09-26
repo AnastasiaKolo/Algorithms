@@ -8,7 +8,7 @@ set_C = set(C[1:])
 ans = []
 for i in range(1, A[0] + 1):
     for j in range(1, B[0] + 1):
-        x = (S - A[i] - B [j])
+        x = (S - A[i] - B[j])
         if x in set_C:
             ans.append((i - 1, j - 1, C[1:].index(x)))
 ans.sort()

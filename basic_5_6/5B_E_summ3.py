@@ -23,20 +23,19 @@ B, len_B = input_list_tuples()
 C = list(map(int, input().split()))
 set_C = set(C[1:])
 ans = []
-i = j = 1
-while (i < len_A) and (A[i][0] <= S):
-    while (j < len_B) and (B[j][0] <= S):
-        x = (S - A[i][0] - B[j][0])
+i = 0
+found = False
+while (i <= len_A - 1) and (A[i][0] <= S) and not found:
+    j = 0
+    while (j <= len_B - 1) and (B[j][0] <= S) and not found:
+        x = S - A[i][0] - B[j][0]
         if x in set_C:
             ans.append((A[i][1], B[j][1], C[1:].index(x)))
+            found = True
         j += 1
     i += 1
 
-# for i in range(1, A[0] + 1):
-#     for j in range(1, B[0] + 1):
-#         x = (S - A[i] - B [j])
-#         if x in set_C:
-#             ans.append((i - 1, j - 1, C[1:].index(x)))
+
 ans.sort()
 if len(ans) > 0:
     print(' '.join(str(i) for i in ans[0]))
