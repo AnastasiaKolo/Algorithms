@@ -62,3 +62,55 @@ for req in reqs:
     else:
         ans.append((first + 1, first + cnt))
 print('\n'.join(str(x) + ' ' + str(y) for (x, y) in ans))
+
+
+'''
+input
+4
+1 2 2 3
+4
+4 3 2 1
+
+output
+0 0
+4 4
+2 3
+1 1
+
+input
+10
+1 2 3 4 5 6 7 7 8 9
+10
+7 3 3 1 3 7 9 7 7 10
+
+output
+7 8
+3 3
+3 3
+1 1
+3 3
+7 8
+10 10
+7 8
+7 8
+0 0
+
+input
+10
+1 3 3 3 3 6 8 8 9 10
+10
+2 9 6 4 2 9 3 7 9 7
+x     x 
+output
+0 0
+9 9
+6 6
+0 0
+0 0
+9 9
+2 5
+0 0
+9 9
+0 0
+
+'''
