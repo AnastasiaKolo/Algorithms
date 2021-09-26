@@ -9,6 +9,8 @@
 # Минимальное такое ℓ, что точки можно покрыть
 # k отрезками длины ℓ.
 
+## Целочисленное решение
+
 def lbinsearch(l, r, check, checkparams):
     while l < r:
         m = (l + r) // 2
@@ -18,16 +20,24 @@ def lbinsearch(l, r, check, checkparams):
             l = m + 1
     return l
 
-def checkptreesinforest(days, params):
-    a, k, b, m, x = params
-    dmitr = a * days - a * (days // k)
-    fedr = b * days - b * (days // m)
-    return dmitr + fedr >= x
+def check_covering(x, params):
+    nums, k = params
+    cur_section = (nums[0], nums[0] + x)
+    cnt_free = k - 1
+    i = 1
+    while (i < len(nums)) and cnt_free >= 0:
+        if cur_section[1] < nums[i]:
+            cur_section = (nums[i], nums[i] + x)
+            cnt_free -= 1
+        i += 1
+    return cnt_free >= 0
 
 
-a, k, b, m, x = map(int, input().split())
-
-
+n, k = map(int, input().split())
+nums = sorted(list(map(int, input().split())))
+params = nums, k
+l = lbinsearch(0, nums[-1] - nums[0], check_covering, params)
+print(l)
 
 '''
 input
@@ -35,4 +45,11 @@ input
 1 2 3 9 8 7
 output
 2
+
+input
+6 2
+-10000 2 3 9 8 70000
+output
+2
+
 '''
