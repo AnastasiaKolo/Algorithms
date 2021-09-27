@@ -4,13 +4,13 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
+    for x in ('0_example','A_bin_tree', 'B_pedigree', 'C_LCA', 'D_beads', 'E_haffman_tree'):
+        f = open("basic_7_8/8B_" + x + '.py', 'w')
+        f.write('# ' +str(x) + "\n")
+        f.close()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
