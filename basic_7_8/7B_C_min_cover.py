@@ -18,7 +18,7 @@
 
 def find_min_cover(m, events):
     ans = []
-
+# недоделано !
     covered = 1
 
     for i in range(len(events)):
