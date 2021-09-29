@@ -15,3 +15,73 @@
 # что и во входe. Завершающие два нуля выводить не нужно. Если покрытие отрезка [0, M]
 # исходным множеством отрезков [Li, Ri] невозможно,
 # то следует вывести единственную фразу “No solution”.
+
+def find_min_cover(m, events):
+    ans = []
+
+    covered = 1
+
+    for i in range(len(events)):
+
+
+        if events[i][1] == -1:
+            covered += 1
+        else:
+            covered -= 1
+    if
+    return ans
+
+
+
+with open('input.txt') as f:
+    m = int(f.readline())
+    sections = []
+    events = []
+    eof = False
+    while not eof:
+        l, r = map(int, f.readline().split())
+        if (l, r) != (0, 0):
+            sections.append((l, r))
+            # в массив событий сразу добавляем события с признаком
+            # начало отрезка -1
+            # конец отрезка 1
+            events.append((l, -1, r))
+            events.append((r, 1, l))
+        elif (r < 0) or (l > m):
+            # совсем ненужные отрезки пропускаем
+            pass
+        else:
+            eof = True
+events.sort()
+sections.sort()
+ans = find_min_cover(m, events)
+if ans:
+    print(len(ans))
+    for rec in ans:
+        print(ans[0] + ' ' + ans[1])
+else:
+    print('No solution')
+
+'''
+input
+1
+-1 0
+-5 -3
+2 5
+0 0
+
+output
+No solution
+
+input
+1
+-1 0
+0 1
+0 0
+
+output
+1
+0 1
+
+
+'''
