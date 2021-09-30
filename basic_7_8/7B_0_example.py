@@ -1,6 +1,6 @@
 # 0_example
 # Метод сортировки событий
-# #
+# # Также "Метод сканирующей прямой"
 # Что это такое:
 # пусть есть некоторые отрезки времени (например, время которое чел находился на сайте)
 # есть моменты события (например приход и уход)
@@ -139,3 +139,104 @@ def isparkingfull(cars, n):
 # Необходимо определить, был ли момент, в котором были заняты все парковочные места
 # + мин кол-во автомобилей, которыми была занята парковка
 # Если такого момента не было, вернуть M+1
+#
+# Решение
+# Добавим еще один счетчик мин кол-во автомобилей, когда заняты все места
+
+def mincarsonfullparking(cars, n):
+    events = []
+    for car in cars:
+        timein, timeout, placefrom, placeto = car
+        events.append((timein, 1, placeto - placefrom + 1))
+        events.append((timeout, -1, placeto - placefrom + 1))
+    events.sort()
+    occupied = 0
+    nowcars = 0
+    mincars = len(cars) + 1
+    for i in range(len(events)):
+        if events[i][1] == -1:
+            occupied -= events[i][2]
+            nowcars -= 1
+        elif events[i][1] == 1:
+            occupied += events[i][2]
+            nowcars += 1
+        if occupied == n:
+            mincars = min(mincars, nowcars)
+    return mincars
+
+# Задача 6
+# Условие аналогично
+# Необходимо определить, был ли момент, в котором были заняты все парковочные места
+# + мин кол-во автомобилей, которыми была занята парковка.
+# А также вернуть номера машин (в порядке начального списка)
+# Если такого момента не было, вернуть пустой список
+#
+# Решение (неэффективное)
+# Добавим в событие номер авто в списке.
+# При обновлении минимума копируем текущее состояние в ответ
+
+def mincarsonfullparking(cars, n):
+    events = []
+    for car in cars:
+        timein, timeout, placefrom, placeto = car
+        events.append((timein, 1, placeto - placefrom + 1))
+        events.append((timeout, -1, placeto - placefrom + 1))
+    events.sort()
+    occupied = 0
+    nowcars = 0
+    mincars = len(cars) + 1
+    carnums = set()
+    bestcarnums = set()
+    for i in range(len(events)):
+        if events[i][1] == -1:
+            occupied -= events[i][2]
+            nowcars -= 1
+            carnums.remove(events[i][3])
+        elif events[i][1] == 1:
+            occupied += events[i][2]
+            nowcars += 1
+            carnums.add(events[i][3])
+        if occupied == n:
+            mincars = min(mincars, nowcars)
+            bestcarnums = carnums.copy()
+    return bestcarnums
+
+# Решение (эффективное)
+# Сделать 2 прохода
+# За первый проход вычисляем мин кол-во машин
+# за второй - создаем список их номеров
+
+def mincarsonfullparking(cars, n):
+    events = []
+    for car in cars:
+        timein, timeout, placefrom, placeto = car
+        events.append((timein, 1, placeto - placefrom + 1))
+        events.append((timeout, -1, placeto - placefrom + 1))
+    events.sort()
+    occupied = 0
+    nowcars = 0
+    mincars = len(cars) + 1
+    for i in range(len(events)):
+        if events[i][1] == -1:
+            occupied -= events[i][2]
+            nowcars -= 1
+        elif events[i][1] == 1:
+            occupied += events[i][2]
+            nowcars += 1
+        if occupied == n and nowcars < mincars:
+            mincars = nowcars
+    carnums = set()
+    nowcars = 0
+    occupied = 0
+    for i in range(len(events)):
+        if events[i][1] == -1:
+            occupied -= events[i][2]
+            nowcars -= 1
+            carnums.remove(events[i][3])
+        elif events[i][1] == 1:
+            occupied += events[i][2]
+            nowcars += 1
+            carnums.add(events[i][3])
+        if occupied == n and nowcars == mincars:
+            return carnums
+    return set()

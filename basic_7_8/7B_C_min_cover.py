@@ -16,20 +16,17 @@
 # исходным множеством отрезков [Li, Ri] невозможно,
 # то следует вывести единственную фразу “No solution”.
 
-def find_min_cover(m, events):
-    ans = []
-# недоделано !
-    covered = 1
-
+# отвечает на запрос, покрыт ли отрезок [0, M] указанными отрезками
+def is_covered(m, events):
+    covered = 0
     for i in range(len(events)):
-
-
         if events[i][1] == -1:
             covered += 1
         else:
             covered -= 1
-    if
-    return ans
+        if (covered <= 0) and (events[i][0] < m):
+            return False
+    return True
 
 
 
@@ -47,20 +44,21 @@ with open('input.txt') as f:
             # конец отрезка 1
             events.append((l, -1, r))
             events.append((r, 1, l))
-        elif (r < 0) or (l > m):
+        elif (r <= 0) or (l >= m):
             # совсем ненужные отрезки пропускаем
             pass
         else:
             eof = True
 events.sort()
 sections.sort()
-ans = find_min_cover(m, events)
-if ans:
-    print(len(ans))
-    for rec in ans:
-        print(ans[0] + ' ' + ans[1])
-else:
-    print('No solution')
+ans = is_covered(m, events)
+print(ans)
+# if ans:
+#     print(len(ans))
+#     for rec in ans:
+#         print(ans[0] + ' ' + ans[1])
+# else:
+#     print('No solution')
 
 '''
 input
@@ -82,6 +80,17 @@ input
 output
 1
 0 1
+
+
+input
+100
+-1 0
+0 20
+80 100
+20 80
+0 0
+
+output
 
 
 '''
