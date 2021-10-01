@@ -2,7 +2,7 @@ def best_section(point, idx_start, sections):
     i = idx_start
     bestsection = (0, 0)
     maxright = 0
-    while (i < len(sections)) and (sections[i][0] <= point) and (sections[i][1] >= point):
+    while (i < len(sections)) and (sections[i][0] <= point): #and (sections[i][1] >= point)
         if sections[i][1] - point > maxright:
             bestsection = sections[i]
             maxright = sections[i][1] - point
@@ -60,4 +60,10 @@ output
 -1000 13
 13 18
 18 500
+
+
+5000
+-50000 4999
+0 0
+
 '''
