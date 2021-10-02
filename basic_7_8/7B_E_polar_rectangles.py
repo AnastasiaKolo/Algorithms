@@ -39,59 +39,72 @@ def calc_area(r1, r2, fi1, fi2):
 def input_polar_rects(filename='input.txt'):
     with open(filename) as f:
         n = int(f.readline())
-        r_set = set()
+        #r_set = set()
         events_fi = []
+        max_r1 = 0
+        min_r2 = 1000000
         for i in range(n):
             r1, r2, fi1, fi2 = map(float, f.readline().split())
+            max_r1 = max(r1, max_r1)
+            min_r2 = min(r2, min_r2)
             if fi2 > fi1:
                 # прямоугольник не проходит через 0
-                r_set.add(r1)
-                r_set.add(r2)
-                events_fi.append((fi1, 1, r1, r2))  # начало
-                events_fi.append((fi2, -1, r1, r2))  # конец
+                events_fi.append((fi1, 1))  # начало
+                events_fi.append((fi2, -1))  # конец
             else:  # fi2 < fi1
                 # прямоугольник проходит через 0
                 # поэтому добавим два с разбиением в точке 0
-                r_set.add(r1)
-                r_set.add(r2)
-                events_fi.append((0, 1, r1, r2))  # начало
-                events_fi.append((fi2, -1, r1, r2))  # конец
-                events_fi.append((fi1, 1, r1, r2))  # начало
-                events_fi.append((2 * PI, -1, r1, r2))  # конец
-    events_fi.sort(key=lambda x: (x[0], -x[1], x[2], x[3]))
-    r_coords = sorted(r_set)
-    return events_fi, r_coords
+                events_fi.append((0, 1))  # начало
+                events_fi.append((fi2, -1))  # конец
+                events_fi.append((fi1, 1))  # начало
+                events_fi.append((2 * PI, -1))  # конец
+    events_fi.sort(key=lambda x: (x[0], -x[1]))
+    r_coords = [max_r1, min_r2]
+    return events_fi, r_coords, n
 
 
-def scanline_fi(events_fi, r_coords):
+def scanline_fi(events_fi, r_coords, n):
     area = 0
     for x in range(1, len(r_coords)):
         prev_fi = 0
         cnt = 0
-        for y in range(len(events_fi)):
-            # Перебираем горизонтальный отрезок
-            if (events_fi[y][3] <= r_coords[x - 1]) or (events_fi[y][2] >= r_coords[x]):
-                # Если отрезок не пересекает текущую полосу – пропускаем его
-                continue
-            if (cnt == 1) and (events_fi[y][1] == 1):
-                # Если текущий отрезок - второй, и он открывающий, запоминаем его
+        for y in range(len(events_fi)):  # Перебираем угол
+            if (cnt == n - 1) and (events_fi[y][1] == 1):
+                # Если текущим отерзком открылись все прямоугольники, запоминаем угол
                 prev_fi = events_fi[y][0]
-            # Увеличиваем или уменьшаем кол - во открытых отрезков
+            # Увеличиваем или уменьшаем кол-во открытых прямоугольников
             cnt += events_fi[y][1]
-            if (cnt == 1) and (events_fi[y][1] == -1):
-                # Если все прямоугольники закрылись – прибавляем их площадь
+            if (cnt == n - 1) and (events_fi[y][1] == -1):
+                # Если хотя бы один прямогуольник закрылся – прибавляем площадь
                 area += calc_area(r_coords[x - 1], r_coords[x], prev_fi, events_fi[y][0])
     return area
 
-events_fi, r_coords = input_polar_rects('input_7e_32.txt')
-area = scanline_fi(events_fi, r_coords)
+events_fi, r_coords, n = input_polar_rects('input.txt')
+area = scanline_fi(events_fi, r_coords, n)
 print(area)
+
+# как выяснилось , надо было искать площадь пересечения всех прямоугольников,
+# а я искала площадь пересечения где пересекается не меньше двух (WA на 32 тесте)
+# но дальше началось TL на 42 тесте
+
+
+# Решение с разбора
+# Сразу находим радиус пересечения всех прямоугольников ("колбасы") потому что это определить легко,
+# будет (max r1, min r2)
+# *до этого я не догадалась. Если внести это дополнение в мой ответ (то есть избавляемся от массива r_coords),
+# вероятно о перестанет TLить
+# *просто так не удалось - теперь ML на 52 тесте
+# также удаляю лишнюю инфу из events_fi
+# *прошло на компиляторе 3.9 без нарушения по memory limit
+#
+# Решение с разбора - продолжение
+# Далее разбираемся с углами методом событий. Поскольку события на круге, делаем так:
+# - на первом проходе поддерживаем множество прямоугольников, кот начались, но еще не закончились
+# -
 
 '''
 test 32
-31339.29181713849
-31339.29181713849
-31339.29181713849 # math
+240.56814673910566
 
 input
 2

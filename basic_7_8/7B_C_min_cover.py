@@ -63,6 +63,50 @@ else:
     print('No solution')
 
 
+# пояснения с разбора:
+# это не совсем про "сортировку событий", но задача важная и фундаментальная
+# Решение
+# Сначала ищем отрезок который покрывает точку 0
+# далее из "жадных" побуждений из всех таких отрезков выбираем тот который продолжается
+# максимально вправо.
+# Решение с разбора
+m = int(input())
+segs = []
+l, r = map(input().split())  # отдельно первый отрезок чтобы писать while
+while l != 0 or r != 0:
+    if r > 0 and l < m:  # так же не добавляем отрезки за пределами
+        segs.append((l, r))
+    l, r = map(input().split())
+segs.sort()  # важна сортировка по левому краю
+ans = []
+nowright = 0
+nextright = 0
+nowbest = 0, 0
+for seg in segs:
+    if seg[0] > nowright:  # значит если не возьмем текущий лучший отрезок в ответ, образуется дырка
+        ans.append(nowbest)
+        nowright = nextright
+        if nowright >= m:
+            break  # уже все покрыто
+    if seg[0] <= nowright and seg[1] > nextright:
+        # найден более лучший отрезок который продолжается дальше вправо
+        nextright = seg[1]
+        nowbest = seg
+# проверяем если нужно добавить отрезок
+if nowright < m:
+    nowright = nextright
+    ans.append(nowbest)
+if nowright < m:
+    print('No solution')
+else:
+    print(len(ans))
+    for seg in ans:
+        print(*seg)
+
+# в итоге - мое решение в принципе правильное, но более запутанное и с большей асимптотической сложностью
+# не зря я подумала что здесь не нужны "события"
+
+
 '''
 input
 500
