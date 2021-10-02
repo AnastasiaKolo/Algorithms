@@ -68,15 +68,15 @@ def find_intersections(n, sections):
 
 with open('input.txt') as f:
     n = int(f.readline())
-    x_coords = []
+    x_set = set()
     y_sections = []
     for i in range(n):
         x1, x2, y1, y2 = map(float, f.readline().split())
-        x_coords.append(x1)  # начало
-        x_coords.append(x2)  # конец
+        x_set.add(x1)  # начало
+        x_set.add(x2)  # конец
         y_sections.append((y1, 1, x1, x2))  # начало
         y_sections.append((y2, -1, x1, x2))  # конец
-x_coords.sort()
+x_coords = sorted(x_set)
 y_sections.sort()
 area = 0
 for x in range(1, len(x_coords)):

@@ -28,8 +28,10 @@
 # Выведите единственное число — площадь искомого пересечения. Ответ
 # будет считаться правильным, если его абсолютная или относительная
 # погрешность не будет превышать 10^-6.
-PI = 3.141592653589793
+#PI = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825
+import math
 
+PI = math.pi
 def calc_area(r1, r2, fi1, fi2):
     a = (fi2 - fi1)*(r2 ** 2 - r1 ** 2) / 2
     return a
@@ -37,59 +39,60 @@ def calc_area(r1, r2, fi1, fi2):
 def input_polar_rects(filename='input.txt'):
     with open(filename) as f:
         n = int(f.readline())
-        fi_coords = []
+        r_set = set()
         events_fi = []
         for i in range(n):
             r1, r2, fi1, fi2 = map(float, f.readline().split())
             if fi2 > fi1:
                 # прямоугольник не проходит через 0
-                fi_coords.append(fi1)
-                fi_coords.append(fi2)
-                events_fi.append((r1, 1, fi1, fi2))  # начало
-                events_fi.append((r2, -1, fi1, fi2))  # конец
+                r_set.add(r1)
+                r_set.add(r2)
+                events_fi.append((fi1, 1, r1, r2))  # начало
+                events_fi.append((fi2, -1, r1, r2))  # конец
             else:  # fi2 < fi1
                 # прямоугольник проходит через 0
                 # поэтому добавим два с разбиением в точке 0
-                fi_coords.append(fi1)
-                fi_coords.append(fi2)
-                fi_coords.append(0)
-                fi_coords.append(2 * PI)
-                events_fi.append((r1, 1, 0, fi2))  # начало
-                events_fi.append((r1, -1, fi1, 2 * PI))  # конец
-                events_fi.append((r2, 1, 0, fi2))  # начало
-                events_fi.append((r2, -1, fi1, 2 * PI))  # конец
+                r_set.add(r1)
+                r_set.add(r2)
+                events_fi.append((0, 1, r1, r2))  # начало
+                events_fi.append((fi2, -1, r1, r2))  # конец
+                events_fi.append((fi1, 1, r1, r2))  # начало
+                events_fi.append((2 * PI, -1, r1, r2))  # конец
     events_fi.sort(key=lambda x: (x[0], -x[1], x[2], x[3]))
-    fi_coords.sort()
-    return events_fi, fi_coords
+    r_coords = sorted(r_set)
+    return events_fi, r_coords
 
 
-def scanline_fi(events_fi, fi_coords):
+def scanline_fi(events_fi, r_coords):
     area = 0
-    for x in range(1, len(fi_coords)):
-        prev_r = 0
+    for x in range(1, len(r_coords)):
+        prev_fi = 0
         cnt = 0
         for y in range(len(events_fi)):
             # Перебираем горизонтальный отрезок
-            if (events_fi[y][3] <= fi_coords[x - 1]) or (events_fi[y][2] >= fi_coords[x]):
+            if (events_fi[y][3] <= r_coords[x - 1]) or (events_fi[y][2] >= r_coords[x]):
                 # Если отрезок не пересекает текущую полосу – пропускаем его
                 continue
             if (cnt == 1) and (events_fi[y][1] == 1):
                 # Если текущий отрезок - второй, и он открывающий, запоминаем его
-                prev_r = events_fi[y][0]
+                prev_fi = events_fi[y][0]
             # Увеличиваем или уменьшаем кол - во открытых отрезков
             cnt += events_fi[y][1]
             if (cnt == 1) and (events_fi[y][1] == -1):
                 # Если все прямоугольники закрылись – прибавляем их площадь
-                area += calc_area(prev_r, events_fi[y][0], fi_coords[x - 1], fi_coords[x])
+                area += calc_area(r_coords[x - 1], r_coords[x], prev_fi, events_fi[y][0])
     return area
 
-
-
-events_fi, fi_coords = input_polar_rects()
-area = scanline_fi(events_fi, fi_coords)
+events_fi, r_coords = input_polar_rects('input_7e_32.txt')
+area = scanline_fi(events_fi, r_coords)
 print(area)
 
 '''
+test 32
+31339.29181713849
+31339.29181713849
+31339.29181713849 # math
+
 input
 2
 1 3 0 3
