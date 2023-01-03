@@ -1,3 +1,10 @@
+темы:
+Лекция 1: «Сложность, тестирование, особые случаи»
+https://youtu.be/QLhqYNsPIVo
+Лекция 2: «Линейный поиск»
+https://youtu.be/SKwB41FrGgU
+
+
 # задача про кондиционер
 
 troom, tcond = map(int, input().split())
